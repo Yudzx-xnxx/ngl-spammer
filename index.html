@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanzofc Send</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        input[type="text"],
+        textarea {
+            width: calc(100% - 40px);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            font-size: 1em;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+              min-height: 120px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: #388e3c;
+        }
+
+        #result {
+            margin-top: 30px;
+            font-size: 1.1em;
+            color: #4CAF50;
+            word-break: break-word; /* Tambahkan ini */
+
+        }
+        .gradient-text {
+          background: linear-gradient(45deg, #4CAF50, #66BB6A);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="gradient-text">Wanzofc Send</span></h1>
+        <input type="text" id="nglLink" placeholder="NGL Link (e.g., ngl.link/yourusername)">
+        <textarea id="message" placeholder="Your Message"></textarea>
+        <button id="sendButton">Send Message</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+      const sendButton = document.getElementById('sendButton');
+      const nglLinkInput = document.getElementById('nglLink');
+      const messageInput = document.getElementById('message');
+      const resultDiv = document.getElementById('result');
+
+      sendButton.addEventListener('click', async () => {
+          const nglLink = nglLinkInput.value.trim();
+          const message = messageInput.value.trim();
+
+        if (!nglLink || !message) {
+          resultDiv.textContent = 'Please fill in both NGL Link and Message.';
+          resultDiv.style.color = 'red'; // Ubah warna jika ada kesalahan
+          return;
+        }
+
+          // Membuat URL API yang benar
+        const apiUrl = `https://api.only-awan.biz.id/api/tools/ngl?link=https://${encodeURIComponent(nglLink)}&text=${encodeURIComponent(message)}&apikey=C68xIhWt`;
+
+          try {
+              resultDiv.textContent = 'Sending...'; // Tampilkan pesan sementara
+              resultDiv.style.color = '#4CAF50'; // Reset warna
+
+              const response = await fetch(apiUrl);
+              const data = await response.json();
+            
+              if (data && data.status === 200 && data.result) {
+                  // Periksa struktur respons dan sesuaikan
+                resultDiv.textContent = 'Message sent successfully!'; // Pesan sukses
+              } else {
+                  resultDiv.textContent = 'Failed to send message. Please check your link or try again later.'; // Pesan error
+                    resultDiv.style.color = 'red'; // Ubah warna jika ada kesalahan pada API
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              resultDiv.textContent = 'An error occurred. Please try again later.';               resultDiv.style.color = 'red'; 
+          }
+      });
+    </script>
+</body>
+</html>
